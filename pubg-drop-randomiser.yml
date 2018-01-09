@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pubg-drop-randomiser
+  labels:
+    app: pubg-drop-randomiser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubg-drop-randomiser
+  template:
+    metadata:
+      labels:
+        app: pubg-drop-randomiser
+    spec:
+      containers:
+        - name: pubg-drop-randomiser
+          image: fireeater64/pubg-drop-randomiser
+          env:
+            - name: DISCORD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: discord
+                  key: API_KEY
