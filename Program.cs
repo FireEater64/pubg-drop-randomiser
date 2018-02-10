@@ -12,7 +12,8 @@ namespace pubg_drop_randomiser
         DiscordSocketClient _client;
         Random _random = new Random();
 
-        static readonly string[] _dropLocations = { 
+        static readonly string[] _erangleDropLocations =
+        { 
             "Pier Town",
             "Hospital",
             "Water Town",
@@ -46,6 +47,40 @@ namespace pubg_drop_randomiser
             "Prison"
         };
 
+        private static readonly string[] _miramarDropLocations =
+        {
+            "Power Grid",
+            "San Martin",
+            "El Pozo",
+            "Ladrillera",
+            "Minas Generales",
+            "Torre Ahumada",
+            "Campo Militar",
+            "Trailer Park",
+            "El Azahar",
+            "Impala",
+            "Ruins",
+            "Hacienda del Patron",
+            "Tierra Bronca",
+            "La Cobreria",
+            "Minas del Sur",
+            "La Bendita",
+            "Valle del Mar",
+            "Crater Fields",
+            "Puerto Paraiso",
+            "Minas del Valle",
+            "Water Treatment",
+            "Los Higos",
+            "Prison",
+            "Chumacera",
+            "Junkyard",
+            "Los Leones",
+            "Monte Nuevo",
+            "Pecado",
+            "Cruz del Valle",
+            "Graveyard"
+        };
+
         public async Task MainAsync()
         {
             _client = new DiscordSocketClient();
@@ -65,18 +100,23 @@ namespace pubg_drop_randomiser
             await Task.Delay(-1);
         }
 
-        private string getRandomDropLocation()
+        private string getRandomDropLocation(string[] givenDropLocations)
         {
-            return _dropLocations[_random.Next(0, _dropLocations.Length)];
+            return givenDropLocations[_random.Next(0, givenDropLocations.Length)];
         }
 
         private async Task MessageReceived(SocketMessage message)
         {
             Console.WriteLine(message.Content);
-            if (message.Content.Equals("!drop"))
+
+            switch (message.Content.ToLowerInvariant())
             {
-                var dropLocation = getRandomDropLocation();
-                await message.Channel.SendMessageAsync($"Drop at {dropLocation}!");
+                case "!drop erangel":
+                    await message.Channel.SendMessageAsync($"Drop at {getRandomDropLocation(_erangleDropLocations)}", true);
+                    break;
+                case "!drop miramar":
+                    await message.Channel.SendMessageAsync($"Drop at {getRandomDropLocation(_miramarDropLocations)}", true);
+                    break;
             }
         }
 
@@ -87,3 +127,4 @@ namespace pubg_drop_randomiser
         }
     }
 }
+
